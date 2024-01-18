@@ -1,0 +1,10 @@
+
+{{define "todoList"}}
+    <div 
+    id="TodoCards"
+    >
+        {{ range . }}
+            {{template "todoCard" .}}
+        {{end}}
+    </div>
+{{end}}

@@ -1,0 +1,57 @@
+version: '3'
+services:
+  
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres_dev
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: harsha
+      POSTGRES_DB: todo
+    ports:
+      - "5432:5432"
+    volumes:
+      - todo_Data:/var/lib/postgresql/data
+
+  # shoe-go:
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile.air
+  #   container_name: shoeGo
+  #   env_file: ./.env.docker
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./:/app
+  #   networks:
+  #     - shoe_go_next
+
+#   rabbitmq:
+#     image: "rabbitmq:3-management"
+#     ports:
+#       - "5672:5672"
+#       - "15672:15672"
+#     environment:
+#       RABBITMQ_DEFAULT_USER: "guest"
+#       RABBITMQ_DEFAULT_PASS: "guest" 
+      
+#   mongo:
+#     image: 'mongo:4.2.17-bionic'
+#     ports:
+#       - "27017:27017"
+# #    restart: always
+#     deploy:
+#       mode: replicated
+#       replicas: 1
+#     environment:
+#       MONGO_INITDB_DATABASE: logs
+#       MONGO_INITDB_ROOT_USERNAME: admin
+#       MONGO_INITDB_ROOT_PASSWORD: password
+#     volumes:
+#       - todo_Data:/data/db
+  
+
+
+volumes:
+  todo_Data:
+      
