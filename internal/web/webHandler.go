@@ -137,13 +137,4 @@ func (w *webHandler) DeleteTodo(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func (w *webHandler) LoginPage (c echo.Context) error {
-	data := make(map[string]interface{})
-	data["PageTitle"] = "Login"
-	return c.Render(http.StatusOK,"pages/login",data)
-}
-func (w *webHandler) Register (c echo.Context) error {
-	data := make(map[string]interface{})
-	data["PageTitle"] = "Register"
-	return c.Render(http.StatusOK,"pages/register",data)
-}
+

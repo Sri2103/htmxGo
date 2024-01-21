@@ -46,7 +46,7 @@ func main() {
 	todoHandler := handler.New(repo)
 
 	// start web handlers
-	webHandler := web.NewWebHandler(repo)
+	webHandler := web.NewWebHandler(db)
 
 	// start handlers
 	Router.Run([]router.Route{
