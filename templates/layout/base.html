@@ -8,10 +8,11 @@
     <link rel="stylesheet" href='/static/css/output.css' type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
   </head>
   <body>
 
-    {{template "navbar"}}
+    {{template "navbar" .}}
   
     {{block "content" .}}
 

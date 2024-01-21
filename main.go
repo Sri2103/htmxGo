@@ -3,18 +3,23 @@ package main
 import (
 	"log"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/labstack/echo/v4"
+	session "github.com/spazzymoto/echo-scs-session"
 	"github.com/sri2103/htmx_go/internal/config"
 	"github.com/sri2103/htmx_go/internal/pkg/database"
 	"github.com/sri2103/htmx_go/internal/pkg/router"
 	handler "github.com/sri2103/htmx_go/internal/todo/handlers"
 	"github.com/sri2103/htmx_go/internal/todo/repository"
+	userModel "github.com/sri2103/htmx_go/internal/userAuth/model"
 	"github.com/sri2103/htmx_go/internal/web"
 )
 
+var sessionManager *scs.SessionManager
+
 func main() {
 	// initialize db
-    cfg := config.LoadConfig()
+	cfg := config.LoadConfig()
 	db, err := database.ConnectSQL(&cfg)
 
 	if err != nil {
@@ -27,6 +32,10 @@ func main() {
 
 	server := echo.New()
 
+	sessionManager = userModel.LoadSession()
+
+	server.Use(session.LoadAndSave(sessionManager))
+
 	// set Router
 
 	Router := router.New(server)
@@ -36,7 +45,6 @@ func main() {
 	repo := repository.NewRepo(db)
 	todoHandler := handler.New(repo)
 
-
 	// start web handlers
 	webHandler := web.NewWebHandler(repo)
 
@@ -45,7 +53,6 @@ func main() {
 		todoHandler.AssignApiRoutes,
 		webHandler.AssignWebRoutes,
 	})
-
 
 	// start server here
 

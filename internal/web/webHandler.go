@@ -11,7 +11,7 @@ import (
 
 func (w *webHandler) Home(c echo.Context) error {
 
-	data := make(map[string]interface{})
+	data := make(map[string]any)
 
 	// data["title"] = "Hello"
 	// data["description"] = "Lets describe it"
@@ -36,7 +36,7 @@ func (w *webHandler) Home(c echo.Context) error {
 
 	data["PageTitle"] = "todos"
 
-	err := c.Render(http.StatusOK, "home.page", data)
+	err := c.Render(http.StatusOK, "pages/home", data)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -70,25 +70,24 @@ func (w *webHandler) GetTodos(c echo.Context) error {
 	return c.Render(200, "todoList", todos)
 }
 
-
 func (w *webHandler) ShowEdit(c echo.Context) error {
 	id := c.Param("id")
 	i, _ := strconv.Atoi(id)
-	todo,err := w.service.GetTodoById(c.Request().Context(),i)
+	todo, err := w.service.GetTodoById(c.Request().Context(), i)
 	fmt.Println(*todo)
 	if err != nil {
 		fmt.Println(err.Error())
-		return echo.NewHTTPError(404,"Not Found!")
+		return echo.NewHTTPError(404, "Not Found!")
 	}
 	return c.Render(http.StatusOK, "todoEditCard", todo)
 }
 
 func (w *webHandler) GetSingleTodo(c echo.Context) error {
 	id := c.Param("id")
-	tid,_:=strconv.ParseInt(id, 10,64)
-	todo,err:=w.service.GetTodoById(c.Request().Context(), int(tid))
-	if err!=nil{
-		return echo.NewHTTPError(404, "No Todo found with ID: " + err.Error())
+	tid, _ := strconv.ParseInt(id, 10, 64)
+	todo, err := w.service.GetTodoById(c.Request().Context(), int(tid))
+	if err != nil {
+		return echo.NewHTTPError(404, "No Todo found with ID: "+err.Error())
 	}
 	return c.Render(200, "todoCard", todo)
 }
@@ -99,13 +98,52 @@ func (w *webHandler) UpdateTodo(c echo.Context) error {
 	desc := c.FormValue("desc")
 	t.Title = title
 	t.Description = desc
-	id ,_ := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.Atoi(c.Param("id"))
 	t.ID = id
 
 	err := w.service.UpdateTodo(id, t)
 	if err != nil {
 		return echo.NewHTTPError(500, "Failed to update the data: "+err.Error())
-		}
-	
-	return c.Render(200,"todoCard",t)
+	}
+
+	return c.Render(200, "todoCard", t)
+}
+
+func (w *webHandler) DummyServerPage(c echo.Context) error {
+	// joke, err := w.jokeService.GetRandomJoke()
+	// if err != nil {
+	// 	return err
+	// }
+	var d = make(map[string]interface{})
+	d["PageTitle"] = "served"
+
+	e := c.Render(200, "pages/server", d)
+	return e
+}
+
+func (w *webHandler) DummyServerHandler(c echo.Context) error {
+	var d = make(map[string]interface{})
+	d["PageTitle"] = "dummy"
+	e := c.Render(200, "pages/dummy", d)
+	return e
+}
+
+func (w *webHandler) DeleteTodo(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	err := w.service.DeleteTodo(c.Request().Context(), id)
+	if err != nil {
+		return echo.NewHTTPError(400, "Failed to delete todo :"+err.Error())
+	}
+	return c.NoContent(http.StatusOK)
+}
+
+func (w *webHandler) LoginPage (c echo.Context) error {
+	data := make(map[string]interface{})
+	data["PageTitle"] = "Login"
+	return c.Render(http.StatusOK,"pages/login",data)
+}
+func (w *webHandler) Register (c echo.Context) error {
+	data := make(map[string]interface{})
+	data["PageTitle"] = "Register"
+	return c.Render(http.StatusOK,"pages/register",data)
 }
