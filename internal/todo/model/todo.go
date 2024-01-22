@@ -4,6 +4,6 @@ type Todo struct {
 	ID          int    `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"desc"`
-	Status      string `json:"status"`
+	Status      bool   `json:"status"`
 	UserID      int    `json:"user_id"`
 }

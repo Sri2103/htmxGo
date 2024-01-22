@@ -19,13 +19,13 @@ func NewTestRepo() *testRepo {
 func (r *testRepo) CreateRecords() {
 	// do nothing for now
 	data = append(data, &model.Todo{
-		ID: 1, Title: "Buy Groceries", Status: "pending",
+		ID: 1, Title: "Buy Groceries", Status: false,
 	})
 	data = append(data, &model.Todo{
-		ID: 2, Title: "Buy Groceries-2", Status: "pending",
+		ID: 2, Title: "Buy Groceries-2", Status: false,
 	})
 	data = append(data, &model.Todo{
-		ID: 3, Title: "Buy Groceries-3", Status: "pending",
+		ID: 3, Title: "Buy Groceries-3", Status: false,
 	})
 }
 

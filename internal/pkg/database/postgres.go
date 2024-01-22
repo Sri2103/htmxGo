@@ -7,6 +7,7 @@ import (
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/sri2103/htmx_go/internal/config"
+	"github.com/sri2103/htmx_go/internal/pkg/database/scripts"
 )
 
 type DB struct {
@@ -15,20 +16,30 @@ type DB struct {
 
 func NewDatabase(dsn string) (*sql.DB, error) {
 
-	db, err := sql.Open("pgx",dsn )
+	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
 	}
 	if err = db.Ping(); err != nil {
 		return nil, err
 	}
+	_, err = db.Exec(scripts.UserTable)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user table: %w", err)
+	}
+
+	_, err = db.Exec(scripts.TodosTable)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create todos table: %w", err)
+	}
 	return db, nil
 }
 
 func ConnectSQL(config *config.AppConfig) (*DB, error) {
 	dsn := fmt.Sprintf(
-		"host=%s port=%d dbname=%s user=%s password=%s sslmode=%s", 
-		config.DB.Host, 
+		"host=%s port=%d dbname=%s user=%s password=%s sslmode=%s",
+		config.DB.Host,
 		config.DB.Port,
 		config.DB.DBName,
 		config.DB.User,
@@ -37,6 +48,7 @@ func ConnectSQL(config *config.AppConfig) (*DB, error) {
 	)
 	db, err := NewDatabase(dsn)
 	if err != nil {
+		fmt.Println(err.Error(),"Error for creating database")
 		panic(err)
 	}
 	db.SetMaxOpenConns(10)

@@ -30,9 +30,6 @@ func New(repo repository.IRepository) *service {
 
 // CreateTodo service
 func (s *service) CreateTodo(ctx context.Context, t *model.Todo) (int, error) {
-	if t.Status == "" {
-		t.Status = "pending"
-	}
 	if t == nil || t.Title == "" {
 		return 0, fmt.Errorf("invalid data")
 	}

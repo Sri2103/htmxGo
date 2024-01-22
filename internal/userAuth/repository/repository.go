@@ -38,7 +38,7 @@ func (r *repo) Login(ctx context.Context, email string, password string) (*userM
 func (r *repo) Register(ctx context.Context, u *userModel.User) (*userModel.User, error) {
 
 	res := r.db.Conn.QueryRowContext(ctx, query.CreateUser, u.Name, u.Email, u.Password)
-	err := res.Scan(&u.ID, &u.Name, &u.Email, &u.Password)
+	err := res.Scan(&u.ID)
 
 	if err != nil {
 		return nil, err
