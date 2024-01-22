@@ -14,7 +14,7 @@ import (
 type IRepository interface {
 	CreateTodo(context.Context, *model.Todo) (int, error)
 	GetTodoById(context.Context, int) (*model.Todo, error)
-	ReadTodos() ([]*model.Todo, error)
+	ReadTodos(id int) ([]*model.Todo, error)
 	UpdateTodo(int, *model.Todo) error
 	DeleteTodo(context.Context, int) error
 }
@@ -31,7 +31,7 @@ func NewRepo(db *database.DB) *repo {
 
 // Create a new Todo item in the database
 func (r *repo) CreateTodo(ctx context.Context, t *model.Todo) (int, error) {
-	Result := r.db.Conn.QueryRow(query.CreateTodo, t.Title, t.Description, t.Status)
+	Result := r.db.Conn.QueryRow(query.CreateTodo, t.Title, t.Description, t.Status,t.UserID)
 	err := Result.Scan(&t.ID) // get id of created todo
 	if err != nil {
 		return 0, fmt.Errorf("cannot get LastInsertId %w", err)
@@ -39,9 +39,9 @@ func (r *repo) CreateTodo(ctx context.Context, t *model.Todo) (int, error) {
 	return int(t.ID), nil
 }
 
-func (r *repo) ReadTodos() ([]*model.Todo, error) {
+func (r *repo) ReadTodos(id int) ([]*model.Todo, error) {
 	var todos []*model.Todo
-	rows, err := r.db.Conn.QueryContext(context.Background(), query.GetTodo)
+	rows, err := r.db.Conn.QueryContext(context.Background(), query.GetTodo,id)
 	if err != nil {
 		return nil, err
 	}

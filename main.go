@@ -45,7 +45,7 @@ func main() {
 	// start repository and handler
 
 	repo := repository.NewRepo(db)
-	todoHandler := handler.New(repo)
+	todoHandler := handler.New(repo,cfg)
 
 	// start web handlers
 	webHandler := web.NewWebHandler(db,cfg)

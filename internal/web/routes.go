@@ -20,7 +20,7 @@ type RenderWrapper struct { // We need to wrap the renderer because we need a di
 
 func (r *RenderWrapper) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 
-	data = r.AddDefaultData(data.(*models.TemplateData), c)
+	// data = r.AddDefaultData(data.(*models.TemplateData), c)
 
 	return r.rnd.HTML(w, 0, name, data) // The zero status code is overwritten by echo.
 }

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sri2103/htmx_go/internal/config"
 	"github.com/sri2103/htmx_go/internal/pkg/router"
 	handler "github.com/sri2103/htmx_go/internal/todo/handlers"
 	"github.com/sri2103/htmx_go/internal/todo/repository"
@@ -12,16 +13,17 @@ import (
 
 var (
 	RouteHandler *handler.Handler
-	srv *echo.Echo
+	srv          *echo.Echo
+	cfg          *config.AppConfig
 )
 
-func TestMain(m *testing.M){
+func TestMain(m *testing.M) {
 	// setup code here
 	srv = echo.New()
 	repo := repository.NewTestRepo()
 	repo.CreateRecords()
-
-	RouteHandler = handler.New(repo)
+	cfg = config.LoadConfig()
+	RouteHandler = handler.New(repo, cfg)
 
 	Router := router.New(srv)
 

@@ -1,10 +1,10 @@
 package query
 
-const CreateTodo = `INSERT INTO todo ( title, description, status) VALUES ( $1, $2, $3 ) RETURNING id;`
+const CreateTodo = `INSERT INTO todo ( title, description, status,user_id) VALUES ( $1, $2, $3,$4 ) RETURNING id;`
 const GetTodo = `SELECT
 id, title, description, status
 FROM
-"public".todo o;`
+"public".todo o where user_id=$1;`
 
 const UpdateTodoStatus = `UPDATE todo SET status=$2 WHERE id=$1`
 const UpdateTodoData = `UPDATE "public".todo SET title=$1,description=$2 WHERE id=$3;`

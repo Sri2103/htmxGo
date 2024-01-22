@@ -8,7 +8,7 @@ import (
 )
 
 type IService interface {
-	Login(context.Context, string, string) error
+	Login(context.Context, string, string) (*userModel.User,error)
 	Register(ctx context.Context, u *userModel.User) (*userModel.User, error)
 	FindUser(context.Context, string) (*userModel.User, error)
 }
@@ -23,7 +23,7 @@ func NewUserService(repo repository.IRepository) *service {
 	}
 }
 
-func (s *service) Login(ctx context.Context, email, password string) error {
+func (s *service) Login(ctx context.Context, email, password string) (*userModel.User,error) {
 	return s.repo.Login(ctx, email, password)
 }
 

@@ -8,7 +8,7 @@
     <!-- todo data -->
     <form 
         class="flex flex-row justify-between"
-        hx-put="/web/updateTodo/{{.Data.todo.ID}}"
+        hx-put="/web/updateTodo/{{.ID}}"
         >
         <div class="text-black flex md:flex-row flex-col gap-6 pl-8 w-full">
             
@@ -16,7 +16,7 @@
                 <div class="relative">
                     <input type="text" id="small_outlined" class="block px-2.5 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
                     placeholder=" " 
-                    value= "{{.Data.todo.Title}}"
+                    value= "{{.Title}}"
                     name="title"
                     />
                     <label for="small_outlined" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-1 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-3 start-1 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">title</label>
@@ -24,7 +24,7 @@
 
                 <div class="relative">
                     <input type="text" id="small_outlined_description" class="block px-2.5 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " 
-                    value= "{{.Data.todo.Description}}"
+                    value= "{{.Description}}"
                     name="desc"
                     />
                     <label for="small_outlined_description" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-1 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-3 start-1 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">description</label>
@@ -36,7 +36,7 @@
         <div class="flex gap-x-4 items-center">
             <span 
                 class="cursor-pointer"
-                hx-get="/web/todo/{{.Data.todo.ID}}"
+                hx-get="/web/todo/{{.ID}}"
                 >
                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m13 7-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>

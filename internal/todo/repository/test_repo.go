@@ -33,7 +33,7 @@ func (r *testRepo) CreateTodo(_ context.Context, _ *model.Todo) (int, error) {
 	return 1, nil
 }
 
-func (r *testRepo) ReadTodos() ([]*model.Todo, error) {
+func (r *testRepo) ReadTodos(_ int) ([]*model.Todo, error) {
 	return data, nil
 }
 func (r *testRepo) UpdateTodo(int, *model.Todo) error {

@@ -11,7 +11,7 @@ import (
 type IService interface {
 	CreateTodo(context.Context, *model.Todo) (int, error)
 	GetTodoById(context.Context, int) (*model.Todo, error)
-	ReadTodos() ([]*model.Todo, error)
+	ReadTodos(int) ([]*model.Todo, error)
 	UpdateTodo(int, *model.Todo) error
 	DeleteTodo(context.Context,int) error
 }
@@ -46,8 +46,8 @@ func (s *service) GetTodoById(ctx context.Context, id int) (*model.Todo, error) 
 }
 
 // ReadTodos service
-func (s *service) ReadTodos() ([]*model.Todo, error) {
-	return s.repo.ReadTodos()
+func (s *service) ReadTodos(id int) ([]*model.Todo, error) {
+	return s.repo.ReadTodos(id)
 }
 
 // updateTodos service

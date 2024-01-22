@@ -5,32 +5,28 @@ import (
 
 	"github.com/labstack/echo/v4"
 	userModel "github.com/sri2103/htmx_go/internal/userAuth/model"
-	"github.com/sri2103/htmx_go/internal/web/models"
 )
 
 func (w *webHandler) LoginPage(c echo.Context) error {
 	data := make(map[string]interface{})
 	data["PageTitle"] = "Login"
-	return c.Render(http.StatusOK, "pages/login", &models.TemplateData{
-		Data: data,
-	})
+	return c.Render(http.StatusOK, "pages/login", data)
 }
 func (w *webHandler) Register(c echo.Context) error {
 	data := make(map[string]interface{})
 	data["PageTitle"] = "Register"
-	return c.Render(http.StatusOK, "pages/register", &models.TemplateData{
-		Data: data,
-	})
+	return c.Render(http.StatusOK, "pages/register", data)
 }
 
 func (w *webHandler) PostLogin(c echo.Context) error {
 	email := c.FormValue("email")
 	password := c.FormValue("password")
-	err := w.userService.Login(c.Request().Context(), email, password)
+	user, err := w.userService.Login(c.Request().Context(), email, password)
 	if err != nil {
 		return err
 	}
 	w.session.Put(c.Request().Context(), "user", email)
+	w.session.Put(c.Request().Context(), "userId", user.ID)
 	return c.Redirect(http.StatusSeeOther, "/web/home")
 
 }
