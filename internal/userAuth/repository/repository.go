@@ -28,7 +28,7 @@ func NewRepo(db *database.DB) IRepository {
 func (r *repo) Login(ctx context.Context, email string, password string) error {
 	var u userModel.User
 	Result := r.db.Conn.QueryRowContext(ctx, query.GetUser, email)
-	err := Result.Scan(&u.ID)
+	err := Result.Scan(&u.ID,&u.Name,&u.Email,&u.Password)
 	if err != nil {
 		return err
 	}
@@ -37,16 +37,12 @@ func (r *repo) Login(ctx context.Context, email string, password string) error {
 
 func (r *repo) Register(ctx context.Context, u *userModel.User) (*userModel.User, error) {
 
-	res, err := r.db.Conn.ExecContext(ctx, query.CreateUser, u.Name, u.Email, u.Password)
-	if err != nil {
-		return nil, err
-	}
-	id, err := res.LastInsertId()
-	if err != nil {
-		return nil, err
-	}
+	res := r.db.Conn.QueryRowContext(ctx, query.CreateUser, u.Name, u.Email, u.Password)
+	err := res.Scan(&u.ID, &u.Name, &u.Email,&u.Password)
 
-	u.ID = int(id)
+	if err != nil {
+		return nil, err
+	}
 
 	return u, nil
 }

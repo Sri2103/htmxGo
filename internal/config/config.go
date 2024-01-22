@@ -1,5 +1,7 @@
 package config
 
+import "github.com/alexedwards/scs/v2"
+
 type DBConfig struct {
 	Host     string `json:"host"`
 	Port     int    `json:"port"`
@@ -15,15 +17,17 @@ type AppConfig struct {
 }
 
 type ServerConfig struct {
-	Addr         string `json:"addr"`
-	ReadTimeout  int    `json:"read_timeout"`
-	WriteTimeout int    `json:"write_timeout"`
+	Addr           string `json:"addr"`
+	ReadTimeout    int    `json:"read_timeout"`
+	WriteTimeout   int    `json:"write_timeout"`
+	SessionManager *scs.SessionManager
 }
 
-
-func LoadConfig() AppConfig{
-	return AppConfig{
-		Server: ServerConfig{},
-		DB: DBConfig{"localhost",5432,"postgres","harsha","todo","disable"},
+func LoadConfig() *AppConfig {
+	return &AppConfig{
+		Server: ServerConfig{
+			Addr: ":3500",
+		},
+		DB: DBConfig{"localhost", 5432, "postgres", "harsha", "todo", "disable"},
 	}
 }

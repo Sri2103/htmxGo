@@ -5,7 +5,7 @@
  {{end}}
 
  <body>
-    {{template "navbar"}}
+    {{template "navbar" .}}
      <div class="max-w-screen-xl mx-auto px-4 py-12 text-red-200 flex flex-col gap-y-4">
          <div 
          id="TodoCards"
@@ -23,6 +23,7 @@
                 <span class="sr-only">Loading...</span>
         </div>
         {{ template "AddTodo"}}
+
     </div>
     {{ block "jsBlock" .}}
     {{end}}

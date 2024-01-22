@@ -5,17 +5,22 @@ import (
 
 	"github.com/labstack/echo/v4"
 	userModel "github.com/sri2103/htmx_go/internal/userAuth/model"
+	"github.com/sri2103/htmx_go/internal/web/models"
 )
 
 func (w *webHandler) LoginPage(c echo.Context) error {
 	data := make(map[string]interface{})
 	data["PageTitle"] = "Login"
-	return c.Render(http.StatusOK, "pages/login", data)
+	return c.Render(http.StatusOK, "pages/login", &models.TemplateData{
+		Data: data,
+	})
 }
 func (w *webHandler) Register(c echo.Context) error {
 	data := make(map[string]interface{})
 	data["PageTitle"] = "Register"
-	return c.Render(http.StatusOK, "pages/register", data)
+	return c.Render(http.StatusOK, "pages/register", &models.TemplateData{
+		Data: data,
+	})
 }
 
 func (w *webHandler) PostLogin(c echo.Context) error {
@@ -25,7 +30,8 @@ func (w *webHandler) PostLogin(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.NoContent(200)
+	w.session.Put(c.Request().Context(), "user", email)
+	return c.Redirect(http.StatusSeeOther, "/web/home")
 
 }
 
@@ -43,6 +49,13 @@ func (w *webHandler) PostRegister(c echo.Context) error {
 		return err
 	}
 
-	return c.NoContent(200)
+	return c.Redirect(http.StatusSeeOther, "/web/login")
 
+}
+
+func (w *webHandler) LogOut(c echo.Context) error {
+	ctx := c.Request().Context()
+	_ = w.session.Destroy(ctx)
+	_ = w.session.RenewToken(ctx)
+	return c.Redirect(http.StatusSeeOther, "/web/login")
 }

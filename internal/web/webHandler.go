@@ -7,6 +7,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/sri2103/htmx_go/internal/todo/model"
+	"github.com/sri2103/htmx_go/internal/web/helpers"
+	"github.com/sri2103/htmx_go/internal/web/models"
 )
 
 func (w *webHandler) Home(c echo.Context) error {
@@ -36,7 +38,9 @@ func (w *webHandler) Home(c echo.Context) error {
 
 	data["PageTitle"] = "todos"
 
-	err := c.Render(http.StatusOK, "pages/home", data)
+	err := c.Render(http.StatusOK, "pages/home", &models.TemplateData{
+		Data: data,
+	})
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -64,10 +68,17 @@ func (w *webHandler) AddTodo(c echo.Context) error {
 
 func (w *webHandler) GetTodos(c echo.Context) error {
 	todos, err := w.service.ReadTodos()
+
+	isLogin := helpers.IsAuthenticated(c)
+	fmt.Println(isLogin, "LoggedIn users")
 	if err != nil {
 		return echo.NewHTTPError(500, "error getting todos: "+err.Error())
 	}
-	return c.Render(200, "todoList", todos)
+	data := make(map[string]interface{})
+	data["todos"] = todos
+	return c.Render(200, "todoList", &models.TemplateData{
+		Data: data,
+	})
 }
 
 func (w *webHandler) ShowEdit(c echo.Context) error {
@@ -79,8 +90,13 @@ func (w *webHandler) ShowEdit(c echo.Context) error {
 		fmt.Println(err.Error())
 		return echo.NewHTTPError(404, "Not Found!")
 	}
-	return c.Render(http.StatusOK, "todoEditCard", todo)
+	data := make(map[string]interface{})
+	data["todo"] = todo
+	return c.Render(http.StatusOK, "todoEditCard", &models.TemplateData{
+		Data: data,
+	})
 }
+
 
 func (w *webHandler) GetSingleTodo(c echo.Context) error {
 	id := c.Param("id")
@@ -117,14 +133,18 @@ func (w *webHandler) DummyServerPage(c echo.Context) error {
 	var d = make(map[string]interface{})
 	d["PageTitle"] = "served"
 
-	e := c.Render(200, "pages/server", d)
+	e := c.Render(200, "pages/server", &models.TemplateData{
+		Data: d,
+	})
 	return e
 }
 
 func (w *webHandler) DummyServerHandler(c echo.Context) error {
 	var d = make(map[string]interface{})
 	d["PageTitle"] = "dummy"
-	e := c.Render(200, "pages/dummy", d)
+	e := c.Render(200, "pages/dummy", &models.TemplateData{
+		Data: d,
+	})
 	return e
 }
 
@@ -136,5 +156,3 @@ func (w *webHandler) DeleteTodo(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusOK)
 }
-
-

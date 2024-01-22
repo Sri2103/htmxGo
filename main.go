@@ -20,19 +20,21 @@ var sessionManager *scs.SessionManager
 func main() {
 	// initialize db
 	cfg := config.LoadConfig()
-	db, err := database.ConnectSQL(&cfg)
+	db, err := database.ConnectSQL(cfg)
 
 	if err != nil {
 		log.Fatalf("Failed to connect DB: %v", err)
 	}
 
 	defer db.Conn.Close()
+	
 
 	// initiate a server
 
 	server := echo.New()
 
 	sessionManager = userModel.LoadSession()
+	cfg.Server.SessionManager = sessionManager
 
 	server.Use(session.LoadAndSave(sessionManager))
 
@@ -46,7 +48,7 @@ func main() {
 	todoHandler := handler.New(repo)
 
 	// start web handlers
-	webHandler := web.NewWebHandler(db)
+	webHandler := web.NewWebHandler(db,cfg)
 
 	// start handlers
 	Router.Run([]router.Route{
@@ -56,5 +58,6 @@ func main() {
 
 	// start server here
 
-	log.Fatal(server.Start(":3500"))
+	log.Fatal(server.Start(cfg.Server.Addr))
 }
+

@@ -15,7 +15,7 @@ func LoadSession() *scs.SessionManager {
 	pool := &redis.Pool{
 		MaxIdle: 10,
 		Dial: func() (redis.Conn, error) {
-			return redis.Dial("tcp", "host:6379")
+			return redis.Dial("tcp", "localhost:6379")
 		},
 	}
 	sessionManager := scs.New()

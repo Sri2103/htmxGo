@@ -3,7 +3,7 @@
     <div 
     id="TodoCards"
     >
-        {{ range . }}
+        {{ range .Data.todos }}
             {{template "todoCard" .}}
         {{end}}
     </div>
