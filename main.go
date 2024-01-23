@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	session "github.com/spazzymoto/echo-scs-session"
 	"github.com/sri2103/htmx_go/internal/config"
@@ -19,6 +20,10 @@ var sessionManager *scs.SessionManager
 
 func main() {
 	// initialize db
+	err := godotenv.Load()
+	if err != nil {
+	  log.Fatal("Error loading .env file")
+	}
 	cfg := config.LoadConfig()
 	db, err := database.ConnectSQL(cfg)
 
@@ -27,7 +32,6 @@ func main() {
 	}
 
 	defer db.Conn.Close()
-	
 
 	// initiate a server
 
@@ -45,10 +49,10 @@ func main() {
 	// start repository and handler
 
 	repo := repository.NewRepo(db)
-	todoHandler := handler.New(repo,cfg)
+	todoHandler := handler.New(repo, cfg)
 
 	// start web handlers
-	webHandler := web.NewWebHandler(db,cfg)
+	webHandler := web.NewWebHandler(db, cfg)
 
 	// start handlers
 	Router.Run([]router.Route{
@@ -60,4 +64,3 @@ func main() {
 
 	log.Fatal(server.Start(cfg.Server.Addr))
 }
-

@@ -1,6 +1,10 @@
 package config
 
-import "github.com/alexedwards/scs/v2"
+import (
+	"os"
+
+	"github.com/alexedwards/scs/v2"
+)
 
 type DBConfig struct {
 	Host     string `json:"host"`
@@ -24,10 +28,22 @@ type ServerConfig struct {
 }
 
 func LoadConfig() *AppConfig {
+
+	// viper.AutomaticEnv()
+	// viper.ReadConfig()
+
 	return &AppConfig{
 		Server: ServerConfig{
 			Addr: ":3500",
 		},
-		DB: DBConfig{"localhost", 5432, "postgres", "harsha", "todo", "disable"},
+		DB: DBConfig{
+
+			Host:     os.Getenv("POSTGRES_HOST"),
+			Port:     5432,
+			User:     os.Getenv("POSTGRES_USER"),
+			Password: os.Getenv("POSTGRES_PASSWORD"),
+			DBName:   os.Getenv("POSTGRES_DBName"),
+			SslMode:  os.Getenv("POSTGRES_SSLMode"),
+		},
 	}
 }
