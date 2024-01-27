@@ -7,6 +7,7 @@ require (
 	github.com/alexedwards/scs/v2 v2.7.0
 	github.com/go-task/slim-sprig/v3 v3.0.0
 	github.com/gomodule/redigo v1.8.9
+	github.com/gorilla/websocket v1.5.1
 	github.com/jackc/pgx/v5 v5.5.2
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/spazzymoto/echo-scs-session v1.0.0

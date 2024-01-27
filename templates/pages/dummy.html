@@ -3,14 +3,135 @@
   {{ block "headBlock" .}}
 
   {{end}}
-  <body>
+  <body x-data="{ items: ['Item 1', 'Item 2', 'Item 3'] }">
+    <style>
+        .drag-and-drop {
+            display: flex;
+            max-width: 760px;
+            padding: 20px;
+            margin: 0 auto;
+          }
+          
+          .drag-and-drop__container {
+            position: relative;
+            overflow: hidden;
+            width: 50%;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+          }
+          
+          .drag-and-drop__divider {
+            padding: 10px;
+            font-size: 20px;
+            align-self: center;
+          }
+          
+          .drag-and-drop__title {
+            padding: 15px 20px;
+            font-size: 20px;
+            background: #ddd;
+          }
+          
+          .drag-and-drop__items {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            min-height: 150px;
+            margin: 0 -1px;
+            padding-bottom: 40px;
+            border-top: 1px solid #ccc;
+          }
+          
+          .drag-and-drop__items--removing {
+            background-color: #fbd38d;
+          }
+          
+          .drag-and-drop__items--adding {
+            background-color: #9ae6b4;
+          }
+          
+          .drag-and-drop__item {
+            padding: 15px 20px;
+            border: 1px solid #ccc;
+            border-top:none;
+            border-radius: 10;
+            background: #fff;
+            cursor: move;
+            transition: background-color 0.2s ease-in-out;
+          }
+          
+          .drag-and-drop__item--dragging {
+            opacity: 0.5;
+          }
+          
+          .drag-and-drop__item--dragging,
+          .drag-and-drop__item--dragging:active {
+            background-color: #fbd38d;
+          }
+    </style>
 
     {{template "navbar" .}}
-     
-    <div>
-        DummySite
-     </div>
+    
+    <!-- dragging and dropping with alpinejs? -->
+    <div class="drag-and-drop" x-data="{ adding: false, removing: false,dragging: false }">
+        <div class="drag-and-drop__container drag-and-drop__container--from">
+          <h3 class="drag-and-drop__title">From</h3>
+          <ul
+            class="drag-and-drop__items"
+            :class="{ 'drag-and-drop__items--removing': removing }"
+            x-on:drop="removing = false"
+            x-on:drop.prevent="
+              const id = event.dataTransfer.getData('text/plain');
+              const target = event.target.closest('ul');
+              const element = document.getElementById(id);
+              target.appendChild(element);
+            "
+            x-on:dragover.prevent="removing = true"
+            x-on:dragleave.prevent="removing = false">
+            <!-- loop through the items -->
+            <template x-for="item in items">
+                <li
+                id="item-1"
+                class="drag-and-drop__item"
+                :class="{ 'drag-and-drop__item--dragging': dragging }"
+                x-on:dragstart.self="
+                  dragging = true;
+                  event.dataTransfer.effectAllowed = 'move';
+                  event.dataTransfer.setData('text/plain', event.target.id);
+                "
+                x-on:dragend="dragging = false"
+                x-data="{ dragging: false }"
+                draggable="true" x-text="item">
+              </li>
+            </template>
 
+          </ul>
+        </div>
+        <div class="drag-and-drop__divider">⇄</div>
+        <div class="drag-and-drop__container drag-and-drop__container--to">
+          <h3 class="drag-and-drop__title">To</h3>
+          <ul
+            class="drag-and-drop__items"
+            :class="{ 'drag-and-drop__items--adding': adding }"
+            x-on:drop="adding = false"
+            x-on:drop.prevent="
+              const id = event.dataTransfer.getData('text/plain');
+              const target = event.target.closest('ul');
+              const element = document.getElementById(id);
+              target.appendChild(element);
+            "
+            x-on:dragover.prevent="adding = true"
+            x-on:dragleave.prevent="adding = false">
+            <!-- loop through the already selected items -->
+          </ul>
+        </div>
+      </div>
+
+{{ block "jsBlock" .}}
+{{end}}
+<script>
+  
+</script>
 
 </body>
 </html>

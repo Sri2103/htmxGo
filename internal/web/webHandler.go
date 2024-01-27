@@ -74,6 +74,16 @@ func (w *webHandler) GetTodos(c echo.Context) error {
 	data["todos"] = todos
 	return c.Render(200, "todoList", data)
 }
+func (w *webHandler) GetDoneTodos(c echo.Context) error {
+	id := w.session.Get(c.Request().Context(),"userId")
+	todos, err := w.service.ReadDoneTodos(id.(int))
+	if err != nil {
+		return echo.NewHTTPError(500, "error getting todos: "+err.Error())
+	}
+	data := make(map[string]interface{})
+	data["todos"] = todos
+	return c.Render(200, "todoList", data)
+}
 
 func (w *webHandler) ShowEdit(c echo.Context) error {
 	id := c.Param("id")
@@ -84,9 +94,7 @@ func (w *webHandler) ShowEdit(c echo.Context) error {
 		fmt.Println(err.Error())
 		return echo.NewHTTPError(404, "Not Found!")
 	}
-	data := make(map[string]interface{})
-	data["todo"] = todo
-	return c.Render(http.StatusOK, "todoEditCard", data)
+	return c.Render(http.StatusOK, "todoEditCard", todo)
 }
 
 func (w *webHandler) GetSingleTodo(c echo.Context) error {
@@ -143,3 +151,30 @@ func (w *webHandler) DeleteTodo(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusOK)
 }
+
+func (w *webHandler) ToggleTodoStatus(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	todo, err := w.service.GetTodoById(c.Request().Context(), id)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "The requested resource was not found")
+	}
+
+    err = w.service.ToggleTodoStatus(c.Request().Context(),id, !todo.Status)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError,"Failed to toggle status")
+	}
+	todo.Status = !todo.Status
+
+	// header := c.Response().Header()
+	// if todo.Status {
+	// 	header.Set("Hx-Retarget", "completedTasks")
+	// 	header.Set("Hx-Reswap","beforeend")
+	// }else{
+	// 	header.Set("Hx-Retarget", "TodoCards")
+	// }
+
+	// c.Response().Writer.Header().Set("Hx-Target") = "completedTasks"
+	
+	return c.Render(200,"todoCard",todo)
+} 

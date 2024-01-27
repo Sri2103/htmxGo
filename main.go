@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	session "github.com/spazzymoto/echo-scs-session"
+	"github.com/sri2103/htmx_go/internal/chat"
 	"github.com/sri2103/htmx_go/internal/config"
 	"github.com/sri2103/htmx_go/internal/pkg/database"
 	"github.com/sri2103/htmx_go/internal/pkg/router"
@@ -54,10 +55,13 @@ func main() {
 	// start web handlers
 	webHandler := web.NewWebHandler(db, cfg)
 
+	chatHandler := chat.NewChatServer()
+
 	// start handlers
 	Router.Run([]router.Route{
 		todoHandler.AssignApiRoutes,
 		webHandler.AssignWebRoutes,
+		chatHandler.AssignChatRoutes,
 	})
 
 	// start server here

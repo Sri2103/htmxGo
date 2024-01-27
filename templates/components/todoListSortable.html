@@ -1,0 +1,15 @@
+
+{{define "todoListSortable"}}
+    <div 
+    id="TodoCards"
+    x-data=""
+    x-on:dragover=""
+    x-on:drop=""
+    >
+        {{ range .todos }}
+            <div>
+                {{template "todoCardSortable" .}}
+            </div>
+        {{end}}
+    </div>
+{{end}}

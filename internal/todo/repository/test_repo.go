@@ -9,6 +9,16 @@ import (
 
 type testRepo struct{}
 
+// ReadDoneTodos implements IRepository.
+func (*testRepo) ReadDoneTodos(id int) ([]*model.Todo, error) {
+	panic("unimplemented")
+}
+
+// ToggleTodoStatus implements IRepository.
+func (*testRepo) ToggleTodoStatus(context.Context, int, bool) error {
+	panic("unimplemented")
+}
+
 var data = []*model.Todo{}
 
 func NewTestRepo() *testRepo {

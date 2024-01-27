@@ -2,9 +2,13 @@ package query
 
 const CreateTodo = `INSERT INTO todo ( title, description, status,user_id) VALUES ( $1, $2, $3,$4 ) RETURNING id;`
 const GetTodo = `SELECT
-id, title, description, status
+id, title, description, status,user_id
 FROM
-"public".todo o where user_id=$1;`
+"public".todo o where user_id=$1 and status=false;`
+const GetDoneTodo = `SELECT
+id, title, description, status,user_id
+FROM
+"public".todo o where user_id=$1 and status=true;`
 
 const UpdateTodoStatus = `UPDATE todo SET status=$2 WHERE id=$1`
 const UpdateTodoData = `UPDATE "public".todo SET title=$1,description=$2 WHERE id=$3;`

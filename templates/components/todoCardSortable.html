@@ -1,15 +1,20 @@
-{{ define "todoCard"}}
+{{ define "todoCardSortable"}}
 
 <div 
     class="md:max-w-screen-md min-w-min mx-auto flex flex-row justify-between shadow-md items-center rounded-md md:w-full py-4"
     hx-target="this"
     hx-swap="outerHTML"
     id="todo-{{.ID}}"
+    draggable="true"
     >
     <!-- todo data -->
         <div class="text-black flex md:flex-row flex-col gap-6 pl-8">
-         
-            <div class="flex flex-col" >
+            <div class="flex items-center md:order-1 order-2">
+                <input checked id="checked-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="checked-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
+
+            </div>
+            <div class="flex flex-col md:order-2 order-1">
                 <div>
                 title:<span>{{.Title}}</span>
                 </div>
@@ -20,22 +25,6 @@
         </div>
 <!-- button -->
         <div class="flex gap-x-4 items-center">
-            <div>
-                <label for="TodoStatus" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                 <select 
-                 x-on:change="console.log($event.target.value)"
-                 hx-put="/web/toggleTodo/{{.ID}}"
-                 hx-target="{{if .Status}} #TodoCards {{else}} #completedTasks {{end}}"
-                 id="TodoStatus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    {{ if .Status}}
-                    <option selected value="true">Done</option>
-                    <option value="false">Todo</option>
-                    {{else}}
-                    <option selected value="false">Todo</option>
-                    <option value="true">Done</option>
-                    {{end}}
-                 </select>
-            </div>
             <span
              class="cursor-pointer"
              hx-get="/web/showEdit/{{.ID}}"

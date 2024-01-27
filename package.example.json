@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "@webpack-cli/generators": "^3.0.7",
+    "autoprefixer": "^10.4.16",
+    "flowbite": "^2.2.1",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "scripts": {
+    "build": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+  }
+}

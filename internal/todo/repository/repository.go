@@ -15,8 +15,10 @@ type IRepository interface {
 	CreateTodo(context.Context, *model.Todo) (int, error)
 	GetTodoById(context.Context, int) (*model.Todo, error)
 	ReadTodos(id int) ([]*model.Todo, error)
+	ReadDoneTodos(id int)([]*model.Todo, error)
 	UpdateTodo(int, *model.Todo) error
 	DeleteTodo(context.Context, int) error
+	ToggleTodoStatus(context.Context,int,bool) error
 }
 
 type repo struct {
@@ -48,7 +50,27 @@ func (r *repo) ReadTodos(id int) ([]*model.Todo, error) {
 	defer rows.Close()
 	for rows.Next() {
 		var todo model.Todo
-		if err = rows.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status); err != nil {
+		if err = rows.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status,&todo.UserID); err != nil {
+			return nil, err
+		}
+		todos = append(todos, &todo)
+
+	}
+	return todos, nil
+
+}
+
+// get done Todos
+func(r *repo)ReadDoneTodos(id int)([]*model.Todo, error){
+	var todos []*model.Todo
+	rows,err:=r.db.Conn.Query(query.GetDoneTodo,id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var todo model.Todo
+		if err = rows.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status,&todo.UserID); err != nil {
 			return nil, err
 		}
 		todos = append(todos, &todo)
@@ -102,4 +124,18 @@ func (r *repo) DeleteTodo(ctx context.Context, id int) error {
 		return errors.New("no record deleted")
 	}
 	return nil
+}
+
+
+func (r *repo) ToggleTodoStatus(ctx context.Context, id int, status bool) error {
+	t,err:=r.GetTodoById(ctx,id)
+	if err!=nil{
+		return err
+	}
+	 t.Status = !t.Status
+	 _,err=r.db.Conn.ExecContext(ctx,query.UpdateTodoStatus, id,status)
+	 if err!=nil{
+		return err
+	 }
+	 return nil
 }

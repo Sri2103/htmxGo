@@ -52,6 +52,7 @@ func (w *webHandler) AssignWebRoutes(e *echo.Echo) {
 	}
 	// e.Renderer = NewRender()
 	e.Static("/static", "static")
+	e.Static("/dist", "dist")
 	Router := e.Group("/web")
 	Router.Use(middleware.Logger())
 	Router.Use(middleware.Recover())
@@ -60,6 +61,8 @@ func (w *webHandler) AssignWebRoutes(e *echo.Echo) {
 	}))
 	Router.GET("/home", w.Home, AuthRequired)
 	Router.GET("/getAll", w.GetTodos, AuthRequired)
+	Router.GET("/getAllDone", w.GetDoneTodos, AuthRequired)
+
 	Router.POST("/addTodo", w.AddTodo, AuthRequired)
 	Router.GET("/showEdit/:id", w.ShowEdit,AuthRequired)
 	Router.GET("/todo/:id", w.GetSingleTodo,AuthRequired)
@@ -67,6 +70,7 @@ func (w *webHandler) AssignWebRoutes(e *echo.Echo) {
 	Router.GET("/served", w.DummyServerPage,AuthRequired)
 	Router.GET("/dummy", w.DummyServerHandler,AuthRequired)
 	Router.DELETE("/deleteTodo/:id", w.DeleteTodo,AuthRequired)
+	Router.PUT("/toggleTodo/:id", w.ToggleTodoStatus,AuthRequired)
 
 	Router.GET("/login", w.LoginPage)
 	Router.GET("/register", w.Register)

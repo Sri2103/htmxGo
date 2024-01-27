@@ -6,9 +6,55 @@
 
  <body>
     {{template "navbar" .}}
-     <div>
-        This is a second page of the server
-     </div>
+
+    <!-- create 2 containers to enlist items for drag and drop -->
+    
+<div 
+class="m-4"
+ x-data="{a: [1,2,3,4,5], dragging: null, dropping: null, timer: null}" 
+ @drop.prevent="if (dragging !== null &amp;&amp; dropping !== null) { if (dragging &lt; dropping) a = [...a.slice(0, dragging), ...a.slice(dragging + 1, dropping + 1), a[dragging], ...a.slice(dropping + 1)]; else a = [...a.slice(0, dropping), a[dragging], ...a.slice(dropping, dragging), ...a.slice(dragging + 1)]; } dropping = null"
+  @dragover.prevent="$event.dataTransfer.dropEffect = 'move'">
+    <div x-text="`Drag=${String(dragging)} Drop=${String(dropping)}`"></div>
+    <div class="mt-2 p-8 h-64 bg-gray-400 overflow-auto"> 
+      <template x-for="(i, index) in a" :key="i">
+        <div 
+            class="p-4 border bg-white mt-2 rounded flex items-center relative" 
+            draggable="true" :class="{ 'border-blue-600': dragging === index }" 
+            @dragstart="dragging = index" @dragend="dragging = null">
+            <i class="fas fa-grip-vertical cursor-move"></i>
+          <div class="ml-2"><span>Draggable Item</span><span x-text="i"></span></div>
+          
+          <div 
+            class="absolute inset-0 opacity-50" 
+            x-show.transition="dragging !== null" 
+            :class="{ 'bg-blue-200': dropping === index }" 
+            @dragenter.prevent="if (index !== dragging) { dropping = index; }" 
+            @dragleave="if (dropping === index) dropping = null"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+<div hx-ws="connect:/chat/hello">
+
+
+  <form  hx-target="#chat-messages" hx-ws="send">
+    <input type="text" name="name" placeholder="Your name" required>
+    <input type="text" name="text" placeholder="Your message" required>
+    <button type="submit">Send</button>
+  </form>
+  
+  <div id="chat-messages"></div>
+
+
+</div>
+    
+
+  {{block "jsBlock".}}{{end}}
+   <script>
+
+   </script>
+
 </body>
 
 </html>
