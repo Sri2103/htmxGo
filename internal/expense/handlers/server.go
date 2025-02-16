@@ -9,5 +9,5 @@ type Handler struct {
 func NewHandler(service service.IService) *Handler {
 	return &Handler{
 		Service: service,
-		}
 	}
+}

@@ -8,7 +8,6 @@ type Router struct {
 
 type Route func(e *echo.Echo)
 
-
 func New(e *echo.Echo) *Router {
 	return &Router{
 		server: e,
@@ -24,4 +23,3 @@ func (e *Router) setRouter(routes []Route) {
 func (e *Router) Run(r []Route) {
 	e.setRouter(r)
 }
-

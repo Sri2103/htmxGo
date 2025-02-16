@@ -23,11 +23,10 @@ func main() {
 	// initialize db
 	err := godotenv.Load()
 	if err != nil {
-	  log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file")
 	}
 	cfg := config.LoadConfig()
 	db, err := database.ConnectSQL(cfg)
-
 	if err != nil {
 		log.Fatalf("Failed to connect DB: %v", err)
 	}

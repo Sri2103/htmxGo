@@ -6,8 +6,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-type Session struct {
-}
+type Session struct{}
 
 func LoadSession() *scs.SessionManager {
 	// TODO: Impl
@@ -23,5 +22,4 @@ func LoadSession() *scs.SessionManager {
 	sessionManager.Store = redisstore.New(pool)
 
 	return sessionManager
-
 }

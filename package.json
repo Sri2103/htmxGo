@@ -30,6 +30,7 @@
   "name": "my-webpack-project",
   "dependencies": {
     "alpinejs": "^3.13.5",
-    "htmx.org": "^1.9.10"
+    "htmx.org": "^1.9.10",
+    "my-webpack-project": "file:"
   }
 }

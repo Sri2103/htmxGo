@@ -9,6 +9,19 @@ document.addEventListener("alpine:init", () => {
             this.open = !this.open
         }
     }))
+    Alpine.data("showing", () => {
+        return {
+            showing: false,
+            testData: "Hello",
+            testAgain: "Data-2",
+            show() {
+                this.showing = true
+            },
+            hide() {
+                this.showing = false
+            }
+        }
+    })
 })
 
 

@@ -59,4 +59,3 @@ func (r redisStore) Set(key string, value string) error {
 	j, _ := json.Marshal(value)
 	return r.Client.Set(key, j, 0).Err()
 }
-

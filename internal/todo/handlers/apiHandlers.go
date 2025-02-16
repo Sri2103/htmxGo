@@ -19,15 +19,13 @@ func (h *Handler) AddTodo(c echo.Context) error {
 	}
 	t.ID = id
 	return c.JSON(http.StatusCreated, t)
-
 }
 
 // get all todos handler
 func (h *Handler) GetAllTodo(c echo.Context) error {
-	id := session.Get(c.Request().Context(),"userId")
+	id := session.Get(c.Request().Context(), "userId")
 	todos, err := h.Service.ReadTodos(id.(int))
 	if err != nil {
-
 		return echo.NewHTTPError(http.StatusInternalServerError, "failed to fetch: "+err.Error())
 	}
 	return c.JSON(http.StatusOK, todos)

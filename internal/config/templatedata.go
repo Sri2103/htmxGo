@@ -1,6 +1,5 @@
 package config
 
-
 // type TemplateData struct {
 // 	StringMap       map[string]string
 // 	IntMap          map[string]int

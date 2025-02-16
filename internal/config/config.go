@@ -28,7 +28,6 @@ type ServerConfig struct {
 }
 
 func LoadConfig() *AppConfig {
-
 	// viper.AutomaticEnv()
 	// viper.ReadConfig()
 
@@ -37,7 +36,6 @@ func LoadConfig() *AppConfig {
 			Addr: ":3500",
 		},
 		DB: DBConfig{
-
 			Host:     os.Getenv("POSTGRES_HOST"),
 			Port:     5432,
 			User:     os.Getenv("POSTGRES_USER"),

@@ -15,7 +15,6 @@ type DB struct {
 }
 
 func NewDatabase(dsn string) (*sql.DB, error) {
-
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
@@ -24,7 +23,6 @@ func NewDatabase(dsn string) (*sql.DB, error) {
 		return nil, err
 	}
 	_, err = db.Exec(scripts.UserTable)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user table: %w", err)
 	}
@@ -48,12 +46,11 @@ func ConnectSQL(config *config.AppConfig) (*DB, error) {
 	)
 	db, err := NewDatabase(dsn)
 	if err != nil {
-		fmt.Println(err.Error(),"Error for creating database")
+		fmt.Println(err.Error(), "Error for creating database")
 		panic(err)
 	}
 	db.SetMaxOpenConns(10)
 	db.SetConnMaxIdleTime(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
 	return &DB{Conn: db}, nil
-
 }

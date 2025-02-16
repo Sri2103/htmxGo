@@ -10,7 +10,6 @@ import (
 )
 
 func (w *webHandler) Home(c echo.Context) error {
-
 	data := c.Get("data").(map[string]any)
 
 	// data["title"] = "Hello"
@@ -37,7 +36,6 @@ func (w *webHandler) Home(c echo.Context) error {
 	data["PageTitle"] = "todos"
 
 	err := c.Render(http.StatusOK, "pages/home", data)
-
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
@@ -65,7 +63,7 @@ func (w *webHandler) AddTodo(c echo.Context) error {
 }
 
 func (w *webHandler) GetTodos(c echo.Context) error {
-	id := w.session.Get(c.Request().Context(),"userId")
+	id := w.session.Get(c.Request().Context(), "userId")
 	todos, err := w.service.ReadTodos(id.(int))
 	if err != nil {
 		return echo.NewHTTPError(500, "error getting todos: "+err.Error())
@@ -74,8 +72,9 @@ func (w *webHandler) GetTodos(c echo.Context) error {
 	data["todos"] = todos
 	return c.Render(200, "todoList", data)
 }
+
 func (w *webHandler) GetDoneTodos(c echo.Context) error {
-	id := w.session.Get(c.Request().Context(),"userId")
+	id := w.session.Get(c.Request().Context(), "userId")
 	todos, err := w.service.ReadDoneTodos(id.(int))
 	if err != nil {
 		return echo.NewHTTPError(500, "error getting todos: "+err.Error())
@@ -137,7 +136,7 @@ func (w *webHandler) DummyServerPage(c echo.Context) error {
 }
 
 func (w *webHandler) DummyServerHandler(c echo.Context) error {
-	d:= c.Get("data").(map[string]any)
+	d := c.Get("data").(map[string]any)
 	d["PageTitle"] = "dummy"
 	e := c.Render(200, "pages/dummy", d)
 	return e
@@ -155,14 +154,13 @@ func (w *webHandler) DeleteTodo(c echo.Context) error {
 func (w *webHandler) ToggleTodoStatus(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	todo, err := w.service.GetTodoById(c.Request().Context(), id)
-
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "The requested resource was not found")
 	}
 
-    err = w.service.ToggleTodoStatus(c.Request().Context(),id, !todo.Status)
+	err = w.service.ToggleTodoStatus(c.Request().Context(), id, !todo.Status)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError,"Failed to toggle status")
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to toggle status")
 	}
 	todo.Status = !todo.Status
 
@@ -175,6 +173,9 @@ func (w *webHandler) ToggleTodoStatus(c echo.Context) error {
 	// }
 
 	// c.Response().Writer.Header().Set("Hx-Target") = "completedTasks"
-	
-	return c.Render(200,"todoCard",todo)
-} 
+	c.Response().Header().Set("HX-Trigger", "watch-toggle")
+
+	// return c.NoContent(200)
+
+	return c.Render(200, "todoCard", todo)
+}

@@ -134,7 +134,6 @@ func (ren *RenderPageWrapper) buildTemplateFromDisk(t string) (*template.Templat
 	// get filenames of all the components from a path
 
 	components, err := filepath.Glob(fmt.Sprintf("%s/%s", ren.TemplateDir, "components/*.html"))
-
 	if err != nil {
 		return nil, errors.New("error getting component files: " + err.Error())
 	}
@@ -153,7 +152,7 @@ func (ren *RenderPageWrapper) buildTemplateFromDisk(t string) (*template.Templat
 
 	// Append the template we want to render to the slice.
 	// templateSlice = append(templateSlice, fmt.Sprintf("%s/%s", ren.TemplateDir, t))
-	templateSlice = append(templateSlice, filepath.Join( ren.TemplateDir, t))
+	templateSlice = append(templateSlice, filepath.Join(ren.TemplateDir, t))
 
 	// Create a new template by parsing all the files in the slice.
 	tmpl, err := template.New(t).Funcs(ren.Functions).ParseFiles(templateSlice...)

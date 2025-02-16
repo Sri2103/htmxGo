@@ -6,8 +6,7 @@ type Message struct {
 	Email string `json:"email"`
 }
 
-type chatHandler struct {
-}
+type chatHandler struct{}
 
 func NewChatServer() *chatHandler {
 	return &chatHandler{}

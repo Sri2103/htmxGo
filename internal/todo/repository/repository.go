@@ -15,10 +15,10 @@ type IRepository interface {
 	CreateTodo(context.Context, *model.Todo) (int, error)
 	GetTodoById(context.Context, int) (*model.Todo, error)
 	ReadTodos(id int) ([]*model.Todo, error)
-	ReadDoneTodos(id int)([]*model.Todo, error)
+	ReadDoneTodos(id int) ([]*model.Todo, error)
 	UpdateTodo(int, *model.Todo) error
 	DeleteTodo(context.Context, int) error
-	ToggleTodoStatus(context.Context,int,bool) error
+	ToggleTodoStatus(context.Context, int, bool) error
 }
 
 type repo struct {
@@ -33,7 +33,7 @@ func NewRepo(db *database.DB) *repo {
 
 // Create a new Todo item in the database
 func (r *repo) CreateTodo(ctx context.Context, t *model.Todo) (int, error) {
-	Result := r.db.Conn.QueryRow(query.CreateTodo, t.Title, t.Description, t.Status,t.UserID)
+	Result := r.db.Conn.QueryRow(query.CreateTodo, t.Title, t.Description, t.Status, t.UserID)
 	err := Result.Scan(&t.ID) // get id of created todo
 	if err != nil {
 		return 0, fmt.Errorf("cannot get LastInsertId %w", err)
@@ -43,51 +43,49 @@ func (r *repo) CreateTodo(ctx context.Context, t *model.Todo) (int, error) {
 
 func (r *repo) ReadTodos(id int) ([]*model.Todo, error) {
 	var todos []*model.Todo
-	rows, err := r.db.Conn.QueryContext(context.Background(), query.GetTodo,id)
+	rows, err := r.db.Conn.QueryContext(context.Background(), query.GetTodo, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var todo model.Todo
-		if err = rows.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status,&todo.UserID); err != nil {
+		if err = rows.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status, &todo.UserID); err != nil {
 			return nil, err
 		}
 		todos = append(todos, &todo)
 
 	}
 	return todos, nil
-
 }
 
 // get done Todos
-func(r *repo)ReadDoneTodos(id int)([]*model.Todo, error){
+func (r *repo) ReadDoneTodos(id int) ([]*model.Todo, error) {
 	var todos []*model.Todo
-	rows,err:=r.db.Conn.Query(query.GetDoneTodo,id)
+	rows, err := r.db.Conn.Query(query.GetDoneTodo, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var todo model.Todo
-		if err = rows.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status,&todo.UserID); err != nil {
+		if err = rows.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status, &todo.UserID); err != nil {
 			return nil, err
 		}
 		todos = append(todos, &todo)
 
 	}
 	return todos, nil
-
 }
 
 // get a single Todo ById
 func (r *repo) GetTodoById(ctx context.Context, id int) (*model.Todo, error) {
 	var todo model.Todo
 	row := r.db.Conn.QueryRow(query.GetTodoById, id)
-	
+
 	err := row.Scan(&todo.ID, &todo.Title, &todo.Description, &todo.Status)
 	if err != nil {
-		return nil, fmt.Errorf("cannot scan data from db: %v",err)
+		return nil, fmt.Errorf("cannot scan data from db: %v", err)
 	}
 	return &todo, nil
 }
@@ -99,14 +97,12 @@ func (r *repo) UpdateTodo(id int, t *model.Todo) error {
 		return sql.ErrNoRows
 	}
 
-	_, err = r.db.Conn.Exec(query.UpdateTodoData, t.Title, t.Description,id)
-
+	_, err = r.db.Conn.Exec(query.UpdateTodoData, t.Title, t.Description, id)
 	if err != nil {
 		return err
 	}
 
 	return nil
-
 }
 
 // delete Todo
@@ -126,16 +122,15 @@ func (r *repo) DeleteTodo(ctx context.Context, id int) error {
 	return nil
 }
 
-
 func (r *repo) ToggleTodoStatus(ctx context.Context, id int, status bool) error {
-	t,err:=r.GetTodoById(ctx,id)
-	if err!=nil{
+	t, err := r.GetTodoById(ctx, id)
+	if err != nil {
 		return err
 	}
-	 t.Status = !t.Status
-	 _,err=r.db.Conn.ExecContext(ctx,query.UpdateTodoStatus, id,status)
-	 if err!=nil{
+	t.Status = !t.Status
+	_, err = r.db.Conn.ExecContext(ctx, query.UpdateTodoStatus, id, status)
+	if err != nil {
 		return err
-	 }
-	 return nil
+	}
+	return nil
 }

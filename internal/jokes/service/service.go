@@ -22,7 +22,6 @@ func New() *jokesService {
 		client: api,
 	}
 	return service
-
 }
 
 func (s *jokesService) GetRandomJoke() (*jokeapi.JokesResp, error) {

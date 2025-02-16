@@ -6,4 +6,3 @@ type User struct {
 	Password string
 	ID       int
 }
-

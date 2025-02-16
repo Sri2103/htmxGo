@@ -46,9 +46,11 @@ func (r *testRepo) CreateTodo(_ context.Context, _ *model.Todo) (int, error) {
 func (r *testRepo) ReadTodos(_ int) ([]*model.Todo, error) {
 	return data, nil
 }
+
 func (r *testRepo) UpdateTodo(int, *model.Todo) error {
 	return nil
 }
+
 func (r *testRepo) DeleteTodo(context.Context, int) error {
 	return nil
 }
@@ -58,7 +60,6 @@ func (r *testRepo) GetTodoById(_ context.Context, id int) (*model.Todo, error) {
 		if v.ID == id {
 			return v, nil
 		}
-
 	}
 	return nil, errors.New("no data found")
 }

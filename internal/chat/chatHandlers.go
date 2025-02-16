@@ -3,20 +3,17 @@ package chat
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
 	"github.com/gorilla/websocket"
-)
-var (
-	upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-		CheckOrigin: func(r *http.Request) bool {
-				return true
-		},
-	}
+	"github.com/labstack/echo/v4"
 )
 
-
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 func (h *chatHandler) hello(c echo.Context) error {
 	//    check if the connection is websocket based
@@ -49,7 +46,3 @@ func (h *chatHandler) hello(c echo.Context) error {
 }
 
 // multi use chat from websocket and htmx?
-
-
-
-

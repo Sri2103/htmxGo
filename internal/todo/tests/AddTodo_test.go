@@ -13,7 +13,6 @@ import (
 // test AddTodo RouteHandler
 
 func Test_handler_AddTodo(t *testing.T) {
-
 	td := `{"id":1,"title":"todo-1","desc":"New-Todo","status":"pending"}`
 
 	t.Run("Test Handler Add Todo at no data", func(t *testing.T) {
@@ -26,7 +25,6 @@ func Test_handler_AddTodo(t *testing.T) {
 		assert.Error(t, err)
 	})
 
-	
 	t.Run("Test Handler Add Todo with data", func(t *testing.T) {
 		jsonStr := []byte(td)
 		req := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer(jsonStr))
@@ -37,5 +35,4 @@ func Test_handler_AddTodo(t *testing.T) {
 		err := RouteHandler.AddTodo(c)
 		assert.NoError(t, err)
 	})
-
 }

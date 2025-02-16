@@ -7,11 +7,10 @@ import (
 
 var app *config.AppConfig
 
-func InitiateHelpers(a *config.AppConfig){
+func InitiateHelpers(a *config.AppConfig) {
 	app = a
 }
 
-
 func IsAuthenticated(c echo.Context) bool {
-	return app.Server.SessionManager.Exists(c.Request().Context(),"user")
+	return app.Server.SessionManager.Exists(c.Request().Context(), "user")
 }

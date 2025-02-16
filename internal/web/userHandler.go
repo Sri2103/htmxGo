@@ -12,6 +12,7 @@ func (w *webHandler) LoginPage(c echo.Context) error {
 	data["PageTitle"] = "Login"
 	return c.Render(http.StatusOK, "pages/login", data)
 }
+
 func (w *webHandler) Register(c echo.Context) error {
 	data := make(map[string]interface{})
 	data["PageTitle"] = "Register"
@@ -28,7 +29,6 @@ func (w *webHandler) PostLogin(c echo.Context) error {
 	w.session.Put(c.Request().Context(), "user", email)
 	w.session.Put(c.Request().Context(), "userId", user.ID)
 	return c.Redirect(http.StatusSeeOther, "/web/home")
-
 }
 
 func (w *webHandler) PostRegister(c echo.Context) error {
@@ -40,13 +40,11 @@ func (w *webHandler) PostRegister(c echo.Context) error {
 	user.Password = pass
 	user.Email = email
 	_, err := w.userService.Register(c.Request().Context(), &user)
-
 	if err != nil {
 		return err
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/web/login")
-
 }
 
 func (w *webHandler) LogOut(c echo.Context) error {

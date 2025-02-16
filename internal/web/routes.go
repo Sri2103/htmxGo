@@ -19,7 +19,6 @@ type RenderWrapper struct { // We need to wrap the renderer because we need a di
 }
 
 func (r *RenderWrapper) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-
 	// data = r.AddDefaultData(data.(*models.TemplateData), c)
 
 	return r.rnd.HTML(w, 0, name, data) // The zero status code is overwritten by echo.
@@ -32,7 +31,7 @@ func (r *RenderWrapper) AddDefaultData(td *models.TemplateData, c echo.Context) 
 	fmt.Println("isAuthenticated", r.s.Exists(c.Request().Context(), "user"))
 	if r.s.Exists(c.Request().Context(), "user") {
 		td.IsAuthenticated = true
-	}else{
+	} else {
 		td.IsAuthenticated = false
 	}
 	return td
@@ -64,17 +63,17 @@ func (w *webHandler) AssignWebRoutes(e *echo.Echo) {
 	Router.GET("/getAllDone", w.GetDoneTodos, AuthRequired)
 
 	Router.POST("/addTodo", w.AddTodo, AuthRequired)
-	Router.GET("/showEdit/:id", w.ShowEdit,AuthRequired)
-	Router.GET("/todo/:id", w.GetSingleTodo,AuthRequired)
-	Router.PUT("/updateTodo/:id", w.UpdateTodo,AuthRequired)
-	Router.GET("/served", w.DummyServerPage,AuthRequired)
-	Router.GET("/dummy", w.DummyServerHandler,AuthRequired)
-	Router.DELETE("/deleteTodo/:id", w.DeleteTodo,AuthRequired)
-	Router.PUT("/toggleTodo/:id", w.ToggleTodoStatus,AuthRequired)
+	Router.GET("/showEdit/:id", w.ShowEdit, AuthRequired)
+	Router.GET("/todo/:id", w.GetSingleTodo, AuthRequired)
+	Router.PUT("/updateTodo/:id", w.UpdateTodo, AuthRequired)
+	Router.GET("/served", w.DummyServerPage, AuthRequired)
+	Router.GET("/dummy", w.DummyServerHandler, AuthRequired)
+	Router.DELETE("/deleteTodo/:id", w.DeleteTodo, AuthRequired)
+	Router.PUT("/toggleTodo/:id", w.ToggleTodoStatus, AuthRequired)
 
 	Router.GET("/login", w.LoginPage)
 	Router.GET("/register", w.Register)
 	Router.POST("/login", w.PostLogin)
 	Router.POST("/register", w.PostRegister)
-	Router.GET("/logout", w.LogOut,AuthRequired)
+	Router.GET("/logout", w.LogOut, AuthRequired)
 }
